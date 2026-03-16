@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { ChevronLeft, Save, X, Terminal } from 'lucide-react';
 
 export default function EditItemPage() {
   const router = useRouter();
@@ -40,121 +41,211 @@ export default function EditItemPage() {
     router.refresh();
   }
 
-  if (!item) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-gray-500">Loading...</p></div>;
+  if (!item) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <Terminal className="h-8 w-8 mx-auto mb-4 animate-pulse" style={{ color: 'var(--accent)' }} />
+        <p className="text-sm uppercase tracking-widest" style={{ color: 'var(--foreground-muted)' }}>LOADING_ENTRY...</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-2xl mx-auto px-4">
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← Back</Link>
-          <h1 className="text-2xl font-bold">Edit Item</h1>
+        <div className="flex items-center gap-4 mb-8 pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <Link href="/" className="btn btn-secondary text-xs px-3 py-2">
+            <ChevronLeft className="h-4 w-4" />
+            BACK
+          </Link>
+          <div>
+            <h1 className="text-lg font-bold uppercase tracking-wider" style={{ color: 'var(--foreground)' }}>
+              EDIT_ENTRY
+            </h1>
+            <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--foreground-muted)' }}>
+              Modifying: {item.name}
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-            <input name="name" required defaultValue={item.name} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-          </div>
+        <form onSubmit={onSubmit} className="space-y-6 card">
+          {/* Section: Basic Info */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // BASIC_INFO
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  NAME *
+                </label>
+                <input name="name" required defaultValue={item.name} className="w-full" />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-            <select name="categoryId" required defaultValue={item.categoryId} className="w-full rounded-md border border-gray-300 px-3 py-2">
-              {categories.map((cat: any) => (
-                <optgroup key={cat.id} label={cat.name}>
-                  {cat.children?.map((child: any) => (
-                    <option key={child.id} value={child.id}>{child.name}</option>
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  CATEGORY *
+                </label>
+                <select name="categoryId" required defaultValue={item.categoryId} className="w-full">
+                  {categories.map((cat: any) => (
+                    <optgroup key={cat.id} label={cat.name}>
+                      {cat.children?.map((child: any) => (
+                        <option key={child.id} value={child.id}>{child.name}</option>
+                      ))}
+                    </optgroup>
                   ))}
-                </optgroup>
-              ))}
-            </select>
-          </div>
+                </select>
+              </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
-              <input name="brand" defaultValue={item.brand || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Material</label>
-              <input name="material" defaultValue={item.material || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-            </div>
-          </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                    BRAND
+                  </label>
+                  <input name="brand" defaultValue={item.brand || ''} className="w-full" />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                    MATERIAL
+                  </label>
+                  <input name="material" defaultValue={item.material || ''} className="w-full" />
+                </div>
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea name="description" rows={3} defaultValue={item.description || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price Paid ($)</label>
-              <input name="pricePaid" type="number" step="0.01" defaultValue={item.pricePaid || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Current Value ($)</label>
-              <input name="currentValue" type="number" step="0.01" defaultValue={item.currentValue || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  DESCRIPTION
+                </label>
+                <textarea name="description" rows={3} defaultValue={item.description || ''} className="w-full" />
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select name="status" defaultValue={item.status} className="w-full rounded-md border border-gray-300 px-3 py-2">
-                <option value="OWNED">Owned</option>
-                <option value="WISHLIST">Wishlist</option>
-                <option value="SOLD">Sold</option>
-                <option value="TRADED">Traded</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Condition</label>
-              <select name="condition" defaultValue={item.condition || ''} className="w-full rounded-md border border-gray-300 px-3 py-2">
-                <option value="">Not specified</option>
-                <option value="NEW">New</option>
-                <option value="LIKE_NEW">Like New</option>
-                <option value="GOOD">Good</option>
-                <option value="FAIR">Fair</option>
-                <option value="POOR">Poor</option>
-              </select>
+          {/* Section: Pricing */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // PRICING
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  PRICE_PAID ($)
+                </label>
+                <input name="pricePaid" type="number" step="0.01" defaultValue={item.pricePaid || ''} className="w-full" />
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  CURRENT_VALUE ($)
+                </label>
+                <input name="currentValue" type="number" step="0.01" defaultValue={item.currentValue || ''} className="w-full" />
+              </div>
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-            <input name="imageUrl" type="url" defaultValue={item.imageUrl || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-              <input name="quantity" type="number" defaultValue={item.quantity || 1} min="1" className="w-full rounded-md border border-gray-300 px-3 py-2" />
+          {/* Section: Status */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // STATUS
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  STATUS
+                </label>
+                <select name="status" defaultValue={item.status} className="w-full">
+                  <option value="OWNED">OWNED</option>
+                  <option value="WISHLIST">WISHLIST</option>
+                  <option value="SOLD">SOLD</option>
+                  <option value="TRADED">TRADED</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  CONDITION
+                </label>
+                <select name="condition" defaultValue={item.condition || ''} className="w-full">
+                  <option value="">NOT_SPECIFIED</option>
+                  <option value="NEW">NEW</option>
+                  <option value="LIKE_NEW">LIKE_NEW</option>
+                  <option value="GOOD">GOOD</option>
+                  <option value="FAIR">FAIR</option>
+                  <option value="POOR">POOR</option>
+                </select>
+              </div>
             </div>
+          </div>
+
+          {/* Section: Media */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // MEDIA
+            </h2>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Weight (g)</label>
-              <input name="weightGrams" type="number" step="0.1" defaultValue={item.weightGrams || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Dimensions</label>
-              <input name="dimensions" defaultValue={item.dimensions || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+              <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                IMAGE_URL
+              </label>
+              <input name="imageUrl" type="url" defaultValue={item.imageUrl || ''} className="w-full" />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Purchase Source</label>
-            <input name="purchaseSource" defaultValue={item.purchaseSource || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+          {/* Section: Specs */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // SPECIFICATIONS
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  QTY
+                </label>
+                <input name="quantity" type="number" defaultValue={item.quantity || 1} min="1" className="w-full" />
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  WEIGHT (g)
+                </label>
+                <input name="weightGrams" type="number" step="0.1" defaultValue={item.weightGrams || ''} className="w-full" />
+              </div>
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  DIMENSIONS
+                </label>
+                <input name="dimensions" defaultValue={item.dimensions || ''} className="w-full" />
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-            <textarea name="notes" rows={2} defaultValue={item.notes || ''} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+          {/* Section: Additional */}
+          <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+              // ADDITIONAL
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  PURCHASE_SOURCE
+                </label>
+                <input name="purchaseSource" defaultValue={item.purchaseSource || ''} className="w-full" />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                  NOTES
+                </label>
+                <textarea name="notes" rows={2} defaultValue={item.notes || ''} className="w-full" />
+              </div>
+            </div>
           </div>
 
-          <div className="flex gap-4 pt-4 border-t">
-            <button type="submit" disabled={loading} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors">
-              {loading ? 'Saving...' : 'Save Changes'}
+          {/* Actions */}
+          <div className="flex gap-4 pt-4">
+            <button type="submit" disabled={loading} className="btn btn-primary">
+              <Save className="h-4 w-4" />
+              {loading ? 'SAVING...' : 'SAVE_CHANGES'}
             </button>
-            <Link href="/" className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-center transition-colors">
-              Cancel
+            <Link href="/" className="btn btn-secondary">
+              <X className="h-4 w-4" />
+              CANCEL
             </Link>
           </div>
         </form>

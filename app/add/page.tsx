@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import AddItemForm from '@/components/AddItemForm';
 import Link from 'next/link';
+import { ChevronLeft, Terminal } from 'lucide-react';
 
 export default function AddPage() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -19,18 +20,31 @@ export default function AddPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading categories...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Terminal className="h-8 w-8 mx-auto mb-4 animate-pulse" style={{ color: 'var(--accent)' }} />
+          <p className="text-sm uppercase tracking-widest" style={{ color: 'var(--foreground-muted)' }}>LOADING_CATEGORIES...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← Back</Link>
-          <h1 className="text-2xl font-bold">Add New Item</h1>
+    <div className="min-h-screen py-8">
+      <div className="max-w-2xl mx-auto px-4">
+        <div className="flex items-center gap-4 mb-8 pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <Link href="/" className="btn btn-secondary text-xs px-3 py-2">
+            <ChevronLeft className="h-4 w-4" />
+            BACK
+          </Link>
+          <div>
+            <h1 className="text-lg font-bold uppercase tracking-wider" style={{ color: 'var(--foreground)' }}>
+              NEW_ENTRY
+            </h1>
+            <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--foreground-muted)' }}>
+              Add item to collection
+            </p>
+          </div>
         </div>
         <AddItemForm categories={categories} />
       </div>

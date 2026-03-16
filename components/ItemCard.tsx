@@ -21,16 +21,31 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item, onDelete }: ItemCardProps) {
-  const statusColors: Record<string, string> = {
-    OWNED: 'bg-green-100 text-green-800',
-    WISHLIST: 'bg-blue-100 text-blue-800',
-    SOLD: 'bg-gray-100 text-gray-800',
-    TRADED: 'bg-purple-100 text-purple-800',
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case 'OWNED':
+        return 'badge-owned';
+      case 'WISHLIST':
+        return 'badge-wishlist';
+      case 'SOLD':
+        return 'badge-sold';
+      case 'TRADED':
+        return 'badge-traded';
+      default:
+        return 'badge-category';
+    }
   };
 
   return (
-    <div className="group relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
-      <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-100 mb-4">
+    <div className="group relative card transition-all duration-150 hover:border-accent" style={{ transition: 'border-color 150ms ease-out' }}>
+      {/* Image Container */}
+      <div 
+        className="aspect-square w-full overflow-hidden mb-4 border"
+        style={{ 
+          borderColor: 'var(--border)',
+          background: 'var(--background-input)'
+        }}
+      >
         {item.imageUrl ? (
           <img
             src={item.imageUrl}
@@ -39,41 +54,89 @@ export default function ItemCard({ item, onDelete }: ItemCardProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <Package className="h-12 w-12 text-gray-400" />
+            <Package className="h-12 w-12" style={{ color: 'var(--foreground-dim)' }} />
           </div>
         )}
       </div>
 
-      <div className="space-y-1">
-        <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-        {item.brand && <p className="text-sm text-gray-500">{item.brand}</p>}
+      {/* Content */}
+      <div className="space-y-2">
+        {/* Name */}
+        <h3 
+          className="font-bold truncate uppercase tracking-wide text-sm"
+          style={{ color: 'var(--foreground)' }}
+        >
+          {item.name}
+        </h3>
+        
+        {/* Brand */}
+        {item.brand && (
+          <p 
+            className="text-xs uppercase tracking-wider"
+            style={{ color: 'var(--foreground-muted)' }}
+          >
+            {item.brand}
+          </p>
+        )}
+        
+        {/* Category Badge */}
         {item.category && (
-          <span className="inline-block text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+          <span className="badge badge-category">
             {item.category.name}
           </span>
         )}
-        <div className="flex items-center justify-between pt-2">
-          <p className="font-medium text-gray-900">
-            {formatCurrency(item.pricePaid)}
+        
+        {/* Price & Status Row */}
+        <div className="flex items-center justify-between pt-2 mt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+          <p className="font-bold text-sm" style={{ color: 'var(--foreground)' }}>
+            {formatCurrency(item.currentValue || item.pricePaid)}
           </p>
-          <span className={`text-xs px-2 py-1 rounded-full ${statusColors[item.status]}`}>
+          <span className={`badge ${getStatusClass(item.status)}`}>
             {item.status}
           </span>
         </div>
       </div>
 
-      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Action Buttons */}
+      <div 
+        className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+      >
         <Link
           href={`/item/${item.id}`}
-          className="p-2 bg-white rounded-full shadow hover:bg-gray-50"
+          className="p-2 border transition-colors duration-150"
+          style={{ 
+            background: 'var(--background-card)',
+            borderColor: 'var(--border)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--accent)';
+            e.currentTarget.style.color = 'var(--accent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border)';
+            e.currentTarget.style.color = 'var(--foreground-muted)';
+          }}
         >
-          <Pencil className="h-4 w-4 text-gray-600" />
+          <Pencil className="h-4 w-4" />
         </Link>
         <button
           onClick={() => onDelete(item.id)}
-          className="p-2 bg-white rounded-full shadow hover:bg-red-50"
+          className="p-2 border transition-colors duration-150"
+          style={{ 
+            background: 'var(--background-card)',
+            borderColor: 'var(--border)',
+            color: 'var(--foreground-muted)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--danger)';
+            e.currentTarget.style.color = 'var(--danger)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border)';
+            e.currentTarget.style.color = 'var(--foreground-muted)';
+          }}
         >
-          <Trash2 className="h-4 w-4 text-red-600" />
+          <Trash2 className="h-4 w-4" />
         </button>
       </div>
     </div>

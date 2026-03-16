@@ -1,26 +1,634 @@
+/* Google Font Import - Must be first */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap');
+
 @import "tailwindcss";
 
+/* ============================================
+   FIDGET TRACKER - TECHNO-MINIMALIST THEME
+   ============================================ */
+
+/* CSS Custom Properties */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Colors - Deep charcoal palette */
+  --background: #0d0d0f;
+  --background-elevated: #131316;
+  --background-card: #18181c;
+  --background-input: #1a1a1f;
+  
+  /* Text Colors */
+  --foreground: #e4e4e7;
+  --foreground-muted: #71717a;
+  --foreground-dim: #52525b;
+  
+  /* Accent Color - Vibrant Cyan */
+  --accent: #00e5cc;
+  --accent-hover: #00ffdf;
+  --accent-dim: #00b8a3;
+  --accent-glow: rgba(0, 229, 204, 0.15);
+  
+  /* Border Colors */
+  --border: #27272a;
+  --border-accent: #00e5cc;
+  --border-focus: #00e5cc;
+  
+  /* Status Colors */
+  --status-owned: #00e5cc;
+  --status-wishlist: #f59e0b;
+  --status-sold: #71717a;
+  --status-traded: #8b5cf6;
+  
+  /* Semantic Colors */
+  --danger: #ef4444;
+  --danger-dim: #dc2626;
+  --success: #22c55e;
+  
+  /* Typography */
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  
+  /* Spacing */
+  --space-unit: 4px;
+  
+  /* Animation */
+  --transition-fast: 100ms ease-out;
+  --transition-normal: 150ms ease-out;
+  --transition-slow: 250ms ease-out;
+  
+  /* Effects */
+  --glow-accent: 0 0 20px rgba(0, 229, 204, 0.3);
+  --glow-accent-subtle: 0 0 10px rgba(0, 229, 204, 0.15);
 }
 
+/* Tailwind Theme Integration */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Styles */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+html {
+  font-family: var(--font-mono);
+  background: var(--background);
+  color: var(--foreground);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scanline Overlay Effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-dim);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+p {
+  font-weight: 400;
+  color: var(--foreground-muted);
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+input, textarea, select {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--background-input);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 10px 12px;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+input:hover, textarea:hover, select:hover {
+  border-color: var(--foreground-dim);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent-subtle);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--foreground-dim);
+  opacity: 1;
+}
+
+/* Remove default select arrow */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+select option {
+  background: var(--background-card);
+  color: var(--foreground);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+button, .btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  outline: none;
+}
+
+/* Primary Button */
+.btn-primary, button[type="submit"]:not(.btn-secondary) {
+  background: var(--accent);
+  color: var(--background);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover, button[type="submit"]:not(.btn-secondary):hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: var(--glow-accent-subtle);
+}
+
+.btn-primary:active, button[type="submit"]:not(.btn-secondary):active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled, button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary, .btn-outline {
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover, .btn-outline:hover {
+  border-color: var(--foreground-dim);
+  background: var(--background-elevated);
+}
+
+/* Danger Button */
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: var(--foreground);
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+
+.card {
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  border-color: var(--foreground-dim);
+}
+
+.card-accent {
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent-subtle);
+}
+
+.card-accent:hover {
+  border-color: var(--accent-hover);
+  box-shadow: var(--glow-accent);
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-owned {
+  color: var(--status-owned);
+  border-color: var(--status-owned);
+  background: rgba(0, 229, 204, 0.1);
+}
+
+.badge-wishlist {
+  color: var(--status-wishlist);
+  border-color: var(--status-wishlist);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.badge-sold {
+  color: var(--status-sold);
+  border-color: var(--status-sold);
+  background: rgba(113, 113, 122, 0.1);
+}
+
+.badge-traded {
+  color: var(--status-traded);
+  border-color: var(--status-traded);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.badge-category {
+  color: var(--foreground-muted);
+  border-color: var(--border);
+  background: var(--background);
+}
+
+/* ============================================
+   STAT CARDS
+   ============================================ */
+
+.stat-card {
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--foreground-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+  background: var(--background-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.header-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.header-subtitle {
+  font-size: 11px;
+  color: var(--foreground-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.filter-input {
+  min-width: 200px;
+}
+
+.filter-select {
+  min-width: 160px;
+}
+
+/* ============================================
+   GRID LAYOUTS
+   ============================================ */
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: var(--glow-accent-subtle);
+  }
+  50% { 
+    box-shadow: var(--glow-accent);
+  }
+}
+
+.animate-flicker {
+  animation: flicker 8s infinite;
+}
+
+.animate-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   CLERK OVERRIDES
+   ============================================ */
+
+/* Dark theme for Clerk components */
+.cl-userButtonTrigger {
+  background: var(--background-card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.cl-userButtonTrigger:hover {
+  border-color: var(--accent) !important;
+}
+
+.cl-logoBox {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Sign in/up page backgrounds */
+.cl-card {
+  background: var(--background-card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.cl-headerTitle, .cl-headerSubtitle {
+  font-family: var(--font-mono) !important;
+}
+
+.cl-formButtonPrimary {
+  background: var(--accent) !important;
+  color: var(--background) !important;
+  font-family: var(--font-mono) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: var(--accent-hover) !important;
+}
+
+.cl-formFieldInput {
+  background: var(--background-input) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+  font-family: var(--font-mono) !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: var(--accent) !important;
+  box-shadow: var(--glow-accent-subtle) !important;
+}
+
+.cl-footerActionLink {
+  color: var(--accent) !important;
+}
+
+.cl-socialButtonsBlockButton {
+  background: var(--background-elevated) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  border-color: var(--accent) !important;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-accent { color: var(--accent); }
+.text-muted { color: var(--foreground-muted); }
+.text-dim { color: var(--foreground-dim); }
+
+.bg-card { background: var(--background-card); }
+.bg-elevated { background: var(--background-elevated); }
+.bg-input { background: var(--background-input); }
+
+.border-default { border-color: var(--border); }
+.border-accent { border-color: var(--accent); }
+
+.glow-accent { box-shadow: var(--glow-accent); }
+.glow-accent-subtle { box-shadow: var(--glow-accent-subtle); }
+
+/* Link styles */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* Loading states */
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  border: 1px dashed var(--border);
+}
+
+.empty-state-icon {
+  color: var(--foreground-dim);
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 8px;
+}
+
+.empty-state-text {
+  font-size: 13px;
+  color: var(--foreground-muted);
+  margin-bottom: 24px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+/* Code/terminal aesthetic */
+.terminal-text {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.terminal-prompt::before {
+  content: '>';
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+/* Price display */
+.price {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.price::before {
+  content: '$';
+  color: var(--foreground-muted);
+  margin-right: 2px;
 }
