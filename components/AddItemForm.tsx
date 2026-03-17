@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, X, Save } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
+import { FIDGET_BRANDS } from '@/lib/brands';
 
 interface Category {
   id: string;
@@ -76,7 +77,18 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
               <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
                 BRAND
               </label>
-              <input name="brand" placeholder="Manufacturer..." className="w-full" />
+              <input 
+                name="brand" 
+                list="brand-list"
+                placeholder="Select or type brand..." 
+                className="w-full" 
+                autoComplete="off"
+              />
+              <datalist id="brand-list">
+                {FIDGET_BRANDS.map((brand) => (
+                  <option key={brand} value={brand} />
+                ))}
+              </datalist>
             </div>
             <div>
               <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>

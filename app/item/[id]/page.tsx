@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, Save, X, Terminal } from 'lucide-react';
+import { FIDGET_BRANDS } from '@/lib/brands';
 
 export default function EditItemPage() {
   const router = useRouter();
@@ -102,7 +103,19 @@ export default function EditItemPage() {
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
                     BRAND
                   </label>
-                  <input name="brand" defaultValue={item.brand || ''} className="w-full" />
+                  <input 
+                    name="brand" 
+                    list="brand-list"
+                    defaultValue={item.brand || ''} 
+                    placeholder="Select or type brand..."
+                    className="w-full" 
+                    autoComplete="off"
+                  />
+                  <datalist id="brand-list">
+                    {FIDGET_BRANDS.map((brand) => (
+                      <option key={brand} value={brand} />
+                    ))}
+                  </datalist>
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>

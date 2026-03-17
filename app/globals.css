@@ -632,3 +632,447 @@ a:hover {
   color: var(--foreground-muted);
   margin-right: 2px;
 }
+
+/* ============================================
+   VISUAL FLAIR - BACKGROUNDS & ATMOSPHERE
+   ============================================ */
+
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.animated-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(0, 229, 204, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 229, 204, 0.04) 0%, transparent 70%);
+  animation: float-orbs 20s ease-in-out infinite;
+}
+
+@keyframes float-orbs {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2%, 1%) rotate(1deg); }
+  50% { transform: translate(-1%, 2%) rotate(-1deg); }
+  75% { transform: translate(1%, -1%) rotate(0.5deg); }
+}
+
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  background-image: 
+    linear-gradient(var(--accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ============================================
+   ENHANCED CARDS
+   ============================================ */
+
+.card-enhanced {
+  position: relative;
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 229, 204, 0) 0%,
+    rgba(0, 229, 204, 0.03) 50%,
+    rgba(139, 92, 246, 0.02) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card-enhanced:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 10px 40px -10px rgba(0, 229, 204, 0.2),
+    0 0 0 1px rgba(0, 229, 204, 0.1);
+}
+
+.card-enhanced:hover::before {
+  opacity: 1;
+}
+
+.card-holographic {
+  position: relative;
+}
+
+.card-holographic::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 229, 204, 0.1),
+    rgba(139, 92, 246, 0.05),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.card-holographic:hover::after {
+  left: 100%;
+}
+
+/* ============================================
+   GLASS MORPHISM
+   ============================================ */
+
+.glass {
+  background: rgba(19, 19, 22, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 204, 0.1);
+}
+
+.glass-header {
+  background: rgba(13, 13, 15, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 229, 204, 0.15);
+}
+
+/* ============================================
+   ENHANCED BUTTONS
+   ============================================ */
+
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-glow:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-magnetic {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-magnetic:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 229, 204, 0.3);
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+  border: none;
+  position: relative;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-gradient:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   ENHANCED BADGES
+   ============================================ */
+
+.badge-animated {
+  animation: badge-glow 2s ease-in-out infinite;
+}
+
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+  50% { box-shadow: 0 0 10px -2px currentColor; }
+}
+
+.badge-wishlist-animated {
+  animation: wishlist-pulse 2s ease-in-out infinite;
+}
+
+@keyframes wishlist-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0);
+    transform: scale(1.02);
+  }
+}
+
+/* ============================================
+   CARD STAGGER ANIMATION
+   ============================================ */
+
+.card-stagger {
+  animation: card-fade-in 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes card-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   LOADING SKELETON
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--background-card) 25%,
+    var(--background-elevated) 50%,
+    var(--background-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--background-input);
+}
+
+.skeleton-text {
+  height: 14px;
+  background: var(--background-input);
+  margin-bottom: 8px;
+}
+
+.skeleton-text-sm {
+  height: 10px;
+  width: 60%;
+}
+
+.skeleton-text-lg {
+  height: 20px;
+  width: 40%;
+}
+
+/* ============================================
+   TYPING EFFECT
+   ============================================ */
+
+.typing-effect {
+  overflow: hidden;
+  border-right: 2px solid var(--accent);
+  white-space: nowrap;
+  animation: 
+    typing 2s steps(30, end) forwards,
+    blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--accent); }
+}
+
+/* ============================================
+   COUNT UP ANIMATION
+   ============================================ */
+
+.count-up {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   GRADIENT TEXT
+   ============================================ */
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 50%, var(--accent) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* ============================================
+   ICON ANIMATIONS
+   ============================================ */
+
+.icon-hover-rotate {
+  transition: transform 0.3s ease;
+}
+
+.icon-hover-rotate:hover {
+  transform: rotate(15deg);
+}
+
+.icon-pulse {
+  animation: icon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ============================================
+   HEADER ENHANCED
+   ============================================ */
+
+.header-enhanced {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13, 13, 15, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 229, 204, 0.1);
+}
+
+.header-logo-animated {
+  position: relative;
+}
+
+.header-logo-animated::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: logo-glow 3s ease-in-out infinite;
+}
+
+@keyframes logo-glow {
+  0%, 100% { opacity: 0.3; box-shadow: 0 0 10px var(--accent); }
+  50% { opacity: 0.6; box-shadow: 0 0 20px var(--accent); }
+}
+
+/* ============================================
+   STAT CARDS ENHANCED
+   ============================================ */
+
+.stat-card-enhanced {
+  position: relative;
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.stat-card-enhanced:hover::before {
+  transform: scaleY(1);
+}
+
+.stat-card-enhanced:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px rgba(0, 229, 204, 0.1);
+}
+
+/* ============================================
+   FLOATING ACTION BUTTONS
+   ============================================ */
+
+.floating-actions {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.2s ease;
+}
+
+.card-enhanced:hover .floating-actions,
+.card:hover .floating-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
