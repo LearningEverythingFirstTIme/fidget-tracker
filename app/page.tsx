@@ -171,7 +171,7 @@ export default function Home() {
       {isSignedIn ? (
         <main className="max-w-7xl mx-auto px-6 py-10">
           {/* Stats Grid */}
-          <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             <div className="stat-card">
               <div className="stat-icon">
                 <span className="material-symbols-outlined">inventory_2</span>
