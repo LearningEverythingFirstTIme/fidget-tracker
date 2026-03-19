@@ -171,42 +171,26 @@ export default function Home() {
       {isSignedIn ? (
         <main className="max-w-7xl mx-auto px-6 py-10">
           {/* Stats Grid */}
-          <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             <div className="stat-card">
-              <div className="stat-icon">
-                <span className="material-symbols-outlined">inventory_2</span>
-              </div>
-              <div className="min-w-0">
-                <p className="stat-value">{animatedItems}</p>
-                <p className="stat-label">Total Items</p>
-              </div>
+              <span className="material-symbols-outlined stat-card-icon">inventory_2</span>
+              <p className="stat-value">{animatedItems}</p>
+              <p className="stat-label">Total Items</p>
             </div>
-            <div className="stat-card card-accent">
-              <div className="stat-icon stat-icon-accent">
-                <span className="material-symbols-outlined">payments</span>
-              </div>
-              <div className="min-w-0">
-                <p className="stat-value">${animatedTotal.toLocaleString()}</p>
-                <p className="stat-label">Collection Value</p>
-              </div>
+            <div className="stat-card stat-card-accent">
+              <span className="material-symbols-outlined stat-card-icon">payments</span>
+              <p className="stat-value">${animatedTotal.toLocaleString()}</p>
+              <p className="stat-label">Collection Value</p>
             </div>
             <div className="stat-card">
-              <div className="stat-icon">
-                <span className="material-symbols-outlined">check_circle</span>
-              </div>
-              <div className="min-w-0">
-                <p className="stat-value">{animatedOwned}</p>
-                <p className="stat-label">Owned</p>
-              </div>
+              <span className="material-symbols-outlined stat-card-icon">check_circle</span>
+              <p className="stat-value">{animatedOwned}</p>
+              <p className="stat-label">Owned</p>
             </div>
             <div className="stat-card">
-              <div className="stat-icon" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
-                <span className="material-symbols-outlined">favorite</span>
-              </div>
-              <div className="min-w-0">
-                <p className="stat-value">{animatedWishlist}</p>
-                <p className="stat-label">Wishlist</p>
-              </div>
+              <span className="material-symbols-outlined stat-card-icon" style={{ color: 'var(--accent)' }}>favorite</span>
+              <p className="stat-value">{animatedWishlist}</p>
+              <p className="stat-label">Wishlist</p>
             </div>
           </div>
 
