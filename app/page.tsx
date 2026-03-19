@@ -173,7 +173,7 @@ export default function Home() {
           {/* Stats Grid */}
           <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             <div className="stat-card">
-              <span className="material-symbols-outlined stat-card-icon">inventory_2</span>
+              <span className="material-symbols-outlined stat-card-icon">inventory</span>
               <p className="stat-value">{animatedItems}</p>
               <p className="stat-label">Total Items</p>
             </div>
@@ -183,7 +183,7 @@ export default function Home() {
               <p className="stat-label">Collection Value</p>
             </div>
             <div className="stat-card">
-              <span className="material-symbols-outlined stat-card-icon">check_circle</span>
+              <span className="material-symbols-outlined stat-card-icon">task_alt</span>
               <p className="stat-value">{animatedOwned}</p>
               <p className="stat-label">Owned</p>
             </div>
