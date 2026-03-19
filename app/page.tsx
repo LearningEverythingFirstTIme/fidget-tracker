@@ -176,7 +176,7 @@ export default function Home() {
               <div className="stat-icon">
                 <span className="material-symbols-outlined">inventory_2</span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="stat-value">{animatedItems}</p>
                 <p className="stat-label">Total Items</p>
               </div>
@@ -185,7 +185,7 @@ export default function Home() {
               <div className="stat-icon stat-icon-accent">
                 <span className="material-symbols-outlined">payments</span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="stat-value">${animatedTotal.toLocaleString()}</p>
                 <p className="stat-label">Collection Value</p>
               </div>
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="stat-icon">
                 <span className="material-symbols-outlined">check_circle</span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="stat-value">{animatedOwned}</p>
                 <p className="stat-label">Owned</p>
               </div>
@@ -203,7 +203,7 @@ export default function Home() {
               <div className="stat-icon" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
                 <span className="material-symbols-outlined">favorite</span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="stat-value">{animatedWishlist}</p>
                 <p className="stat-label">Wishlist</p>
               </div>
