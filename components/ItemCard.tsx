@@ -54,31 +54,32 @@ export default function ItemCard({ item, onDelete }: ItemCardProps) {
       </div>
 
       {/* Content */}
-      <div className="space-y-2">
+      <div className="space-y-2 min-w-0">
         <h3 
-          className="font-display text-lg truncate group-hover:text-accent transition-colors duration-300"
+          className="font-display text-base truncate group-hover:text-accent transition-colors duration-300"
           style={{ color: 'var(--charcoal)' }}
+          title={item.name}
         >
           {item.name}
         </h3>
         
         {item.brand && (
-          <p className="label">
+          <p className="label truncate" title={item.brand}>
             {item.brand}
           </p>
         )}
         
         {item.category && (
-          <span className="badge badge-category">
+          <span className="badge badge-category truncate max-w-full" title={item.category.name}>
             {item.category.name}
           </span>
         )}
         
-        <div className="flex items-center justify-between pt-3 mt-3 border-t-3 border-charcoal">
-          <p className="price">
+        <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t-3 border-charcoal">
+          <p className="price shrink-0">
             {formatCurrency(item.currentValue || item.pricePaid)}
           </p>
-          <span className={`badge ${getStatusClass(item.status)}`}>
+          <span className={`badge ${getStatusClass(item.status)} shrink-0`}>
             {item.status === 'OWNED' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>check</span>}
             {item.status === 'WISHLIST' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>favorite</span>}
             {item.status === 'SOLD' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>sell</span>}
