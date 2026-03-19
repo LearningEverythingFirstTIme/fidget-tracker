@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, X } from 'lucide-react';
 import { FIDGET_BRANDS } from '@/lib/brands';
 
 interface Category {
@@ -37,17 +36,15 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 card">
+    <form onSubmit={onSubmit} className="card space-y-8">
       {/* Section: Basic Info */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // BASIC_INFO
+      <div className="pb-6 border-b-3 border-charcoal">
+        <h2 className="section-header">
+          Basic Information
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              NAME *
-            </label>
+            <label className="form-label">Name *</label>
             <input 
               name="name" 
               required 
@@ -57,11 +54,9 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              CATEGORY *
-            </label>
+            <label className="form-label">Category *</label>
             <select name="categoryId" required className="w-full">
-              <option value="">SELECT_CATEGORY</option>
+              <option value="">Select category</option>
               {categories.map((cat) => (
                 <optgroup key={cat.id} label={cat.name}>
                   {cat.children.map((child) => (
@@ -72,11 +67,9 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-                BRAND
-              </label>
+              <label className="form-label">Brand</label>
               <input 
                 name="brand" 
                 list="brand-list"
@@ -91,133 +84,109 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
               </datalist>
             </div>
             <div>
-              <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-                MATERIAL
-              </label>
+              <label className="form-label">Material</label>
               <input name="material" placeholder="Titanium, Brass, Steel..." className="w-full" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              DESCRIPTION
-            </label>
+            <label className="form-label">Description</label>
             <textarea name="description" rows={3} placeholder="Describe this item..." className="w-full" />
           </div>
         </div>
       </div>
 
       {/* Section: Pricing */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // PRICING
+      <div className="pb-6 border-b-3 border-charcoal">
+        <h2 className="section-header">
+          Pricing
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-5">
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              PRICE_PAID ($)
-            </label>
+            <label className="form-label">Price Paid ($)</label>
             <input name="pricePaid" type="number" step="0.01" placeholder="0.00" className="w-full" />
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              CURRENT_VALUE ($)
-            </label>
+            <label className="form-label">Current Value ($)</label>
             <input name="currentValue" type="number" step="0.01" placeholder="0.00" className="w-full" />
           </div>
         </div>
       </div>
 
       {/* Section: Status */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // STATUS
+      <div className="pb-6 border-b-3 border-charcoal">
+        <h2 className="section-header">
+          Status
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-5">
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              STATUS
-            </label>
+            <label className="form-label">Status</label>
             <select name="status" className="w-full">
-              <option value="OWNED">OWNED</option>
-              <option value="WISHLIST">WISHLIST</option>
-              <option value="SOLD">SOLD</option>
-              <option value="TRADED">TRADED</option>
+              <option value="OWNED">Owned</option>
+              <option value="WISHLIST">Wishlist</option>
+              <option value="SOLD">Sold</option>
+              <option value="TRADED">Traded</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              CONDITION
-            </label>
+            <label className="form-label">Condition</label>
             <select name="condition" className="w-full">
-              <option value="">NOT_SPECIFIED</option>
-              <option value="NEW">NEW</option>
-              <option value="LIKE_NEW">LIKE_NEW</option>
-              <option value="GOOD">GOOD</option>
-              <option value="FAIR">FAIR</option>
-              <option value="POOR">POOR</option>
+              <option value="">Not specified</option>
+              <option value="NEW">New</option>
+              <option value="LIKE_NEW">Like New</option>
+              <option value="GOOD">Good</option>
+              <option value="FAIR">Fair</option>
+              <option value="POOR">Poor</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Section: Media */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // MEDIA
+      <div className="pb-6 border-b-3 border-charcoal">
+        <h2 className="section-header">
+          Media
         </h2>
         <div>
-          <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-            IMAGE_URL
-          </label>
+          <label className="form-label">Image URL</label>
           <input name="imageUrl" type="url" placeholder="https://..." className="w-full" />
         </div>
       </div>
 
       {/* Section: Specs */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // SPECIFICATIONS
+      <div className="pb-6 border-b-3 border-charcoal">
+        <h2 className="section-header">
+          Specifications
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-5">
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              QTY
-            </label>
+            <label className="form-label">Quantity</label>
             <input name="quantity" type="number" defaultValue="1" min="1" className="w-full" />
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              WEIGHT (g)
-            </label>
+            <label className="form-label">Weight (g)</label>
             <input name="weightGrams" type="number" step="0.1" placeholder="0.0" className="w-full" />
           </div>
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              DIMENSIONS
-            </label>
+            <label className="form-label">Dimensions</label>
             <input name="dimensions" placeholder="50x30mm" className="w-full" />
           </div>
         </div>
       </div>
 
       {/* Section: Additional */}
-      <div className="pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
-          // ADDITIONAL
+      <div className="pb-6">
+        <h2 className="section-header">
+          Additional Details
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              PURCHASE_SOURCE
-            </label>
+            <label className="form-label">Purchase Source</label>
             <input name="purchaseSource" placeholder="Etsy, Direct from maker, Amazon..." className="w-full" />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--foreground-muted)' }}>
-              NOTES
-            </label>
+            <label className="form-label">Notes</label>
             <textarea name="notes" rows={2} placeholder="Additional notes..." className="w-full" />
           </div>
         </div>
@@ -226,16 +195,16 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
       {/* Actions */}
       <div className="flex gap-4 pt-4">
         <button type="submit" disabled={loading} className="btn btn-primary">
-          <Plus className="h-4 w-4" />
-          {loading ? 'ADDING...' : 'ADD_TO_COLLECTION'}
+          <span className="material-symbols-outlined icon-sm">add</span>
+          {loading ? 'Adding...' : 'Add to Collection'}
         </button>
         <button 
           type="button" 
           onClick={() => router.push('/')} 
           className="btn btn-secondary"
         >
-          <X className="h-4 w-4" />
-          CANCEL
+          <span className="material-symbols-outlined icon-sm">close</span>
+          Cancel
         </button>
       </div>
     </form>

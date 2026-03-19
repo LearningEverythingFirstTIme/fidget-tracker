@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
-import { Package, Pencil, Trash2 } from 'lucide-react';
 
 interface ItemCardProps {
   item: {
@@ -25,7 +24,7 @@ export default function ItemCard({ item, onDelete }: ItemCardProps) {
       case 'OWNED':
         return 'badge-owned';
       case 'WISHLIST':
-        return 'badge-wishlist badge-wishlist-animated';
+        return 'badge-wishlist';
       case 'SOLD':
         return 'badge-sold';
       case 'TRADED':
@@ -36,13 +35,10 @@ export default function ItemCard({ item, onDelete }: ItemCardProps) {
   };
 
   return (
-    <div className="group relative card-enhanced card-holographic">
+    <div className="card group relative">
+      {/* Image */}
       <div 
-        className="aspect-square w-full overflow-hidden mb-4 border relative"
-        style={{ 
-          borderColor: 'var(--border)',
-          background: 'var(--background-input)'
-        }}
+        className="aspect-square w-full overflow-hidden mb-4 border-3 border-charcoal relative bg-paper-dark"
       >
         {item.imageUrl ? (
           <img
@@ -52,69 +48,73 @@ export default function ItemCard({ item, onDelete }: ItemCardProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <Package className="h-12 w-12 transition-transform duration-300 group-hover:scale-110" style={{ color: 'var(--foreground-dim)' }} />
+            <span className="material-symbols-outlined icon-xl" style={{ color: 'var(--muted)' }}>inventory_2</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent group-hover:via-transparent pointer-events-none transition-all duration-300"></div>
       </div>
 
+      {/* Content */}
       <div className="space-y-2">
         <h3 
-          className="font-bold truncate uppercase tracking-wide text-sm group-hover:text-accent transition-colors duration-300"
-          style={{ color: 'var(--foreground)' }}
+          className="font-display text-lg truncate group-hover:text-accent transition-colors duration-300"
+          style={{ color: 'var(--charcoal)' }}
         >
           {item.name}
         </h3>
         
         {item.brand && (
-          <p 
-            className="text-xs uppercase tracking-wider"
-            style={{ color: 'var(--foreground-muted)' }}
-          >
+          <p className="label">
             {item.brand}
           </p>
         )}
         
         {item.category && (
-          <span className="badge badge-category transition-all duration-300 group-hover:border-accent">
+          <span className="badge badge-category">
             {item.category.name}
           </span>
         )}
         
-        <div className="flex items-center justify-between pt-2 mt-2 border-t transition-colors duration-300" style={{ borderColor: 'var(--border)' }}>
-          <p className="font-bold text-sm" style={{ color: 'var(--foreground)' }}>
+        <div className="flex items-center justify-between pt-3 mt-3 border-t-3 border-charcoal">
+          <p className="price">
             {formatCurrency(item.currentValue || item.pricePaid)}
           </p>
           <span className={`badge ${getStatusClass(item.status)}`}>
+            {item.status === 'OWNED' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>check</span>}
+            {item.status === 'WISHLIST' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>favorite</span>}
+            {item.status === 'SOLD' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>sell</span>}
+            {item.status === 'TRADED' && <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>swap_horiz</span>}
             {item.status}
           </span>
         </div>
       </div>
 
-      <div className="floating-actions absolute top-2 right-2 flex gap-1">
+      {/* Floating Actions */}
+      <div className="floating-actions absolute top-3 right-3 flex gap-2">
         <Link
           href={`/item/${item.id}`}
-          className="p-2 border transition-all duration-300 hover:border-accent hover:shadow-lg"
+          className="btn-icon"
           style={{ 
-            background: 'rgba(24, 24, 28, 0.95)',
-            borderColor: 'var(--border)',
-            color: 'var(--foreground-muted)',
-            backdropFilter: 'blur(8px)'
+            background: 'white',
+            border: '3px solid var(--charcoal)',
+            padding: '10px',
+            boxShadow: '3px 3px 0px var(--charcoal)'
           }}
         >
-          <Pencil className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
+          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>edit</span>
         </Link>
         <button
-          onClick={() => onDelete(item.id)}
-          className="p-2 border transition-all duration-300 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/20"
+          onClick={(e) => {
+            e.preventDefault();
+            onDelete(item.id);
+          }}
+          className="btn-icon btn-danger"
           style={{ 
-            background: 'rgba(24, 24, 28, 0.95)',
-            borderColor: 'var(--border)',
-            color: 'var(--foreground-muted)',
-            backdropFilter: 'blur(8px)'
+            background: 'white',
+            padding: '10px',
+            boxShadow: '3px 3px 0px var(--danger)'
           }}
         >
-          <Trash2 className="h-4 w-4 transition-transform duration-200 hover:scale-110" />
+          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
         </button>
       </div>
     </div>
