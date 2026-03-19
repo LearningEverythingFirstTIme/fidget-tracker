@@ -175,22 +175,22 @@ export default function Home() {
             <div className="stat-card">
               <span className="material-symbols-outlined stat-card-icon">inventory</span>
               <p className="stat-value">{animatedItems}</p>
-              <p className="stat-label">Total Items</p>
+              <p className="stat-label"># Total Items</p>
             </div>
             <div className="stat-card stat-card-accent">
               <span className="material-symbols-outlined stat-card-icon">payments</span>
               <p className="stat-value">${animatedTotal.toLocaleString()}</p>
-              <p className="stat-label">Collection Value</p>
+              <p className="stat-label">$ Collection Value</p>
             </div>
             <div className="stat-card">
               <span className="material-symbols-outlined stat-card-icon">task_alt</span>
               <p className="stat-value">{animatedOwned}</p>
-              <p className="stat-label">Owned</p>
+              <p className="stat-label"># Owned</p>
             </div>
             <div className="stat-card">
               <span className="material-symbols-outlined stat-card-icon" style={{ color: 'var(--accent)' }}>favorite</span>
               <p className="stat-value">{animatedWishlist}</p>
-              <p className="stat-label">Wishlist</p>
+              <p className="stat-label"># Wishlist</p>
             </div>
           </div>
 
