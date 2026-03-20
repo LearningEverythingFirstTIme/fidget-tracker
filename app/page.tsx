@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth, SignInButton, UserButton } from '@clerk/nextjs';
 import ItemCard from '@/components/ItemCard';
-import { Plus, Search, Bell, FileText, TrendingUp, Package, Sparkles, Wallet, Box, Star } from 'lucide-react';
+import { Plus, Search, Bell, FileText, TrendingUp, Package, Sparkles, Wallet, Box } from 'lucide-react';
 
 interface Item {
   id: string;
