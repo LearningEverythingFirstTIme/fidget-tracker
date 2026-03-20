@@ -4,6 +4,26 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth, SignInButton, UserButton } from '@clerk/nextjs';
 import ItemCard from '@/components/ItemCard';
+import { Plus, Search, Bell, FileText, TrendingUp, Package, Sparkles, Wallet, Box, Star } from 'lucide-react';
+
+interface Item {
+  id: string;
+  name: string;
+  brand: string | null;
+  imageUrl: string | null;
+  pricePaid: number | null;
+  currentValue: number | null;
+  status: string;
+  condition: string | null;
+  categoryId: string;
+  category: { name: string } | null;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  children: { id: string; name: string }[];
+}
 
 function useCountUp(end: number, duration: number = 1000, start: boolean = false) {
   const [count, setCount] = useState(0);
@@ -33,13 +53,13 @@ function useCountUp(end: number, duration: number = 1000, start: boolean = false
 
 function SkeletonCard() {
   return (
-    <div className="skeleton-card">
-      <div className="skeleton-image skeleton mb-4"></div>
-      <div className="skeleton-text skeleton"></div>
-      <div className="skeleton-text skeleton skeleton-text-sm"></div>
-      <div className="flex justify-between items-center mt-4 pt-4 border-t-3 border-charcoal">
-        <div className="skeleton-text skeleton skeleton-text-lg"></div>
-        <div className="skeleton skeleton" style={{ width: '70px', height: '24px' }}></div>
+    <div className="card">
+      <div className="aspect-square w-full skeleton mb-4" style={{ background: 'var(--surface-container-highest)', borderRadius: '0.5rem' }}></div>
+      <div className="h-4 skeleton mb-2" style={{ background: 'var(--surface-container-highest)', width: '80%' }}></div>
+      <div className="h-3 skeleton mb-4" style={{ background: 'var(--surface-container-highest)', width: '50%' }}></div>
+      <div className="flex justify-between items-center pt-4" style={{ borderTop: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <div className="h-5 skeleton" style={{ background: 'var(--surface-container-highest)', width: '40%' }}></div>
+        <div className="skeleton" style={{ width: '60px', height: '20px', background: 'var(--surface-container-highest)' }}></div>
       </div>
     </div>
   );
@@ -47,8 +67,8 @@ function SkeletonCard() {
 
 export default function Home() {
   const { isSignedIn, isLoaded } = useAuth();
-  const [items, setItems] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [search, setSearch] = useState('');
@@ -103,9 +123,9 @@ export default function Home() {
     return matchesCategory && matchesStatus && matchesSearch;
   });
 
-  const totalValue = items.reduce((sum: number, item: any) => sum + (item.currentValue || item.pricePaid || 0), 0);
-  const ownedCount = items.filter((i: any) => i.status === 'OWNED').length;
-  const wishlistCount = items.filter((i: any) => i.status === 'WISHLIST').length;
+  const totalValue = items.reduce((sum, item) => sum + (item.currentValue || item.pricePaid || 0), 0);
+  const ownedCount = items.filter(i => i.status === 'OWNED').length;
+  const wishlistCount = items.filter(i => i.status === 'WISHLIST').length;
 
   const animatedTotal = useCountUp(Math.round(totalValue), 1500, statsVisible);
   const animatedItems = useCountUp(items.length, 1000, statsVisible);
@@ -120,120 +140,136 @@ export default function Home() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-paper">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <span className="material-symbols-outlined icon-xl animate-pulse" style={{ color: 'var(--accent)' }}>hourglass_empty</span>
-          <p className="label mt-4">Loading...</p>
+          <Package className="h-10 w-10 mx-auto mb-4 loading-spinner" style={{ color: 'var(--primary)' }} />
+          <p className="text-sm uppercase tracking-widest" style={{ color: 'var(--on-surface-variant)' }}>Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative z-10">
-      {/* Header */}
-      <header className="header">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 flex items-center justify-center border-3 border-charcoal bg-charcoal">
-                <span className="text-white font-bold text-lg" style={{ fontFamily: 'var(--font-serif)' }}>F</span>
-              </div>
-              <div>
-                <h1 className="header-title">FIDGET COLLECTOR</h1>
-                <p className="header-subtitle">Curated Catalog</p>
-              </div>
+    <div className="min-h-screen flex flex-col">
+      {/* Top Header */}
+      <header className="top-header">
+        <div className="flex items-center gap-8 flex-1">
+          <div className="header-title">The Kinetic Atelier</div>
+          {isSignedIn && (
+            <div className="search-bar hidden lg:flex">
+              <Search className="h-4 w-4" style={{ color: 'var(--on-surface-variant)' }} />
+              <input 
+                type="text" 
+                placeholder="Search the collection..." 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-          </div>
-          <div className="flex items-center gap-4">
-            {!isSignedIn ? (
-              <SignInButton>
-                <button className="btn btn-primary">
-                  <span className="material-symbols-outlined icon-sm">login</span>
-                  Sign In
-                </button>
-              </SignInButton>
-            ) : (
-              <>
-                <Link href="/add" className="btn btn-primary">
-                  <span className="material-symbols-outlined icon-sm">add</span>
-                  Add Item
-                </Link>
-                <div className="border-3 border-charcoal p-1 bg-white" style={{ boxShadow: '4px 4px 0px var(--charcoal)' }}>
-                  <UserButton />
-                </div>
-              </>
-            )}
+          )}
+        </div>
+        <div className="flex items-center gap-6">
+          {isSignedIn && (
+            <>
+              <button className="btn-ghost p-2" style={{ background: 'transparent' }}>
+                <Bell className="h-5 w-5" style={{ color: 'var(--on-surface-variant)' }} />
+              </button>
+              <button className="btn-ghost p-2" style={{ background: 'transparent' }}>
+                <FileText className="h-5 w-5" style={{ color: 'var(--on-surface-variant)' }} />
+              </button>
+            </>
+          )}
+          <div className="w-10 h-10 rounded-full overflow-hidden ghost-border" style={{ background: 'var(--surface-container-highest)' }}>
+            <UserButton />
           </div>
         </div>
       </header>
 
       {isSignedIn ? (
-        <main className="max-w-7xl mx-auto px-6 py-10">
-          {/* Stats Grid */}
-          <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            <div className="stat-card">
-              <span className="material-symbols-outlined stat-card-icon">inventory</span>
-              <p className="stat-value">{animatedItems}</p>
-              <p className="stat-label"># Total Items</p>
+        <div className="flex-1 p-8">
+          {/* Welcome Section */}
+          <section className="mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--primary)' }}>Authenticated Access</p>
+                <h2 className="headline-lg" style={{ fontFamily: 'var(--font-headline)' }}>Welcome back, Collector</h2>
+              </div>
+              <Link href="/add" className="btn btn-primary">
+                <Plus className="h-5 w-5" />
+                <span>Add Piece</span>
+              </Link>
             </div>
-            <div className="stat-card stat-card-accent">
-              <span className="material-symbols-outlined stat-card-icon">payments</span>
-              <p className="stat-value">${animatedTotal.toLocaleString()}</p>
-              <p className="stat-label">$ Collection Value</p>
+
+            {/* Stats Cards */}
+            <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="stat-card">
+                <Wallet className="stat-icon" style={{ transform: 'rotate(12deg)' }} />
+                <p className="stat-label">Total Collection Value</p>
+                <p className="stat-value">${animatedTotal.toLocaleString()}</p>
+                <div className="stat-meta stat-meta-positive">
+                  <TrendingUp className="h-3 w-3" />
+                  <span>Track your investment</span>
+                </div>
+              </div>
+              <div className="stat-card">
+                <Box className="stat-icon" style={{ transform: 'rotate(12deg)' }} />
+                <p className="stat-label">Items Owned</p>
+                <p className="stat-value" style={{ color: 'var(--on-surface)' }}>{animatedItems}</p>
+                <div className="stat-meta">
+                  <span>{animatedOwned} currently in collection</span>
+                </div>
+              </div>
+              <div className="stat-card">
+                <Sparkles className="stat-icon" style={{ transform: 'rotate(12deg)' }} />
+                <p className="stat-label">Wishlist Items</p>
+                <p className="stat-value" style={{ color: 'var(--tertiary)' }}>{animatedWishlist}</p>
+                <div className="stat-meta">
+                  <span>Pieces to acquire</span>
+                </div>
+              </div>
             </div>
-            <div className="stat-card">
-              <span className="material-symbols-outlined stat-card-icon">task_alt</span>
-              <p className="stat-value">{animatedOwned}</p>
-              <p className="stat-label"># Owned</p>
-            </div>
-            <div className="stat-card">
-              <span className="material-symbols-outlined stat-card-icon" style={{ color: 'var(--accent)' }}>favorite</span>
-              <p className="stat-value">{animatedWishlist}</p>
-              <p className="stat-label"># Wishlist</p>
-            </div>
-          </div>
+          </section>
 
           {/* Filter Bar */}
           <div className="filter-bar">
-            <input
-              type="text"
-              placeholder="Search by name or brand..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="filter-input"
-            />
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="filter-select"
+              className="input-box"
+              style={{ minWidth: '160px' }}
             >
               <option value="">All Categories</option>
-              {categories.map((cat: any) => (
+              {categories.map((cat) => (
                 <optgroup key={cat.id} label={cat.name}>
-                  {cat.children?.map((child: any) => (
+                  {cat.children?.map((child) => (
                     <option key={child.id} value={child.id}>{child.name}</option>
                   ))}
                 </optgroup>
               ))}
             </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="filter-select"
+            <button 
+              onClick={() => setStatusFilter(statusFilter === 'OWNED' ? '' : 'OWNED')}
+              className={`chip ${statusFilter === 'OWNED' ? 'chip-active' : ''}`}
             >
-              <option value="">All Status</option>
-              <option value="OWNED">Owned</option>
-              <option value="WISHLIST">Wishlist</option>
-              <option value="SOLD">Sold</option>
-              <option value="TRADED">Traded</option>
-            </select>
-            {(filter || statusFilter || search) && (
+              Owned
+            </button>
+            <button 
+              onClick={() => setStatusFilter(statusFilter === 'WISHLIST' ? '' : 'WISHLIST')}
+              className={`chip ${statusFilter === 'WISHLIST' ? 'chip-active' : ''}`}
+            >
+              Wishlist
+            </button>
+            <button 
+              onClick={() => setStatusFilter(statusFilter === 'SOLD' ? '' : 'SOLD')}
+              className={`chip ${statusFilter === 'SOLD' ? 'chip-active' : ''}`}
+            >
+              Sold
+            </button>
+            {(filter || statusFilter) && (
               <button
-                onClick={() => { setFilter(''); setStatusFilter(''); setSearch(''); }}
-                className="btn btn-secondary"
+                onClick={() => { setFilter(''); setStatusFilter(''); }}
+                className="btn btn-ghost"
+                style={{ padding: '6px 12px' }}
               >
-                <span className="material-symbols-outlined icon-sm">close</span>
                 Reset
               </button>
             )}
@@ -243,26 +279,26 @@ export default function Home() {
           {loading ? (
             <div className="item-grid">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="card-stagger" style={{ animationDelay: `${i * 0.1}s`, opacity: 0 }}>
+                <div key={i} className="card-stagger" style={{ animationDelay: `${i * 0.1}s` }}>
                   <SkeletonCard />
                 </div>
               ))}
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="empty-state">
-              <span className="material-symbols-outlined icon-xl" style={{ color: 'var(--muted)' }}>inventory_2</span>
+              <Package className="h-16 w-16 mx-auto mb-6 empty-state-icon" />
               <h3 className="empty-state-title">
-                {items.length === 0 ? 'Your Collection Awaits' : 'No Matching Items'}
+                {items.length === 0 ? 'Collection Empty' : 'No Matching Items'}
               </h3>
               <p className="empty-state-text">
                 {items.length === 0
-                  ? 'Start building your curated fidget toy collection today.'
-                  : 'Try adjusting your search or filters.'}
+                  ? 'Begin your curated collection by adding your first piece.'
+                  : 'Adjust filters to discover your pieces.'}
               </p>
               {items.length === 0 && (
                 <Link href="/add" className="btn btn-primary">
-                  <span className="material-symbols-outlined icon-sm">add</span>
-                  Add Your First Item
+                  <Plus className="h-4 w-4" />
+                  Add First Piece
                 </Link>
               )}
             </div>
@@ -275,62 +311,58 @@ export default function Home() {
               ))}
             </div>
           )}
-        </main>
+        </div>
       ) : (
         /* Landing Page */
-        <div className="max-w-4xl mx-auto text-center py-20 px-6">
-          <div className="mb-10">
-            <div className="inline-flex items-center justify-center w-28 h-28 border-3 border-charcoal bg-charcoal mb-8" style={{ boxShadow: '8px 8px 0px var(--charcoal)' }}>
-              <span className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-serif)' }}>F</span>
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-2xl text-center">
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-24 h-24 mb-6 relative" style={{ border: '2px solid var(--primary)' }}>
+                <span className="text-4xl font-bold" style={{ color: 'var(--primary)', fontFamily: 'var(--font-headline)' }}>KA</span>
+                <div className="absolute inset-0 animate-pulse" style={{ background: 'radial-gradient(circle, rgba(233, 195, 73, 0.2) 0%, transparent 70%)' }}></div>
+              </div>
             </div>
-          </div>
-          
-          <h2 className="font-display text-4xl md:text-5xl mb-6" style={{ color: 'var(--charcoal)' }}>
-            The Curated Catalog<br/>for Fidget Enthusiasts
-          </h2>
-          
-          <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: 'var(--muted)' }}>
-            Track your spinners, sliders, clickers, and more with precision. 
-            Build a beautiful collection catalog that celebrates tactile design.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <SignInButton>
-              <button className="btn btn-primary text-base px-8 py-4">
-                <span className="material-symbols-outlined">login</span>
-                Get Started
-              </button>
-            </SignInButton>
-          </div>
+            
+            <h2 className="headline-lg mb-4" style={{ fontFamily: 'var(--font-headline)' }}>
+              The Curated Gallery<br/>for Precision Collectors
+            </h2>
+            
+            <p className="body-lg mb-10 max-w-lg mx-auto" style={{ color: 'var(--on-surface-variant)' }}>
+              Track spinners, sliders, and haptic coins with the reverence they deserve. 
+              A premium stage for your mechanical masterpieces.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <SignInButton>
+                <button className="btn btn-primary">
+                  <span>Initialize Session</span>
+                </button>
+              </SignInButton>
+            </div>
 
-          {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="card text-center">
-              <span className="material-symbols-outlined icon-xl mb-4" style={{ color: 'var(--charcoal)' }}>inventory</span>
-              <h3 className="font-display text-xl mb-2">Catalog</h3>
-              <p className="text-sm" style={{ color: 'var(--muted)' }}>Organize your entire fidget collection in one beautiful place</p>
-            </div>
-            <div className="card card-accent text-center">
-              <span className="material-symbols-outlined icon-xl mb-4 text-white">analytics</span>
-              <h3 className="font-display text-xl mb-2 text-white">Track Value</h3>
-              <p className="text-sm text-white" style={{ opacity: 0.9 }}>Monitor the value of your collection over time</p>
-            </div>
-            <div className="card text-center">
-              <span className="material-symbols-outlined icon-xl mb-4" style={{ color: 'var(--charcoal)' }}>category</span>
-              <h3 className="font-display text-xl mb-2">Categorize</h3>
-              <p className="text-sm" style={{ color: 'var(--muted)' }}>Sort by type, material, brand, and custom categories</p>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="card">
+                <p className="text-2xl font-bold mb-1" style={{ color: 'var(--primary)', fontFamily: 'var(--font-headline)' }}>01</p>
+                <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>Catalog</p>
+              </div>
+              <div className="card">
+                <p className="text-2xl font-bold mb-1" style={{ color: 'var(--primary)', fontFamily: 'var(--font-headline)' }}>02</p>
+                <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>Organize</p>
+              </div>
+              <div className="card">
+                <p className="text-2xl font-bold mb-1" style={{ color: 'var(--primary)', fontFamily: 'var(--font-headline)' }}>03</p>
+                <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>Analyze</p>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Footer */}
-      <footer className="border-t-3 border-charcoal mt-auto py-6 bg-white">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="label">
-            FIDGET COLLECTOR — <span style={{ color: 'var(--accent)' }}>Built with purpose</span>
-          </p>
-        </div>
+      <footer className="py-4 text-center ghost-border" style={{ borderTop: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--on-surface-dim)' }}>
+          THE KINETIC ATELIER — <span style={{ color: 'var(--primary)' }}>System Online</span>
+        </p>
       </footer>
     </div>
   );

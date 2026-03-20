@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FIDGET_BRANDS } from '@/lib/brands';
+import { Plus, X } from 'lucide-react';
 
 interface Category {
   id: string;
@@ -36,26 +37,25 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="card space-y-8">
-      {/* Section: Basic Info */}
-      <div className="pb-6 border-b-3 border-charcoal">
-        <h2 className="section-header">
+    <form onSubmit={onSubmit} className="card card-elevated space-y-10">
+      <div className="pb-8" style={{ borderBottom: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Basic Information
-        </h2>
-        <div className="space-y-5">
+        </p>
+        <div className="space-y-6">
           <div>
-            <label className="form-label">Name *</label>
+            <label className="label mb-3 block">Name *</label>
             <input 
               name="name" 
               required 
               placeholder="Enter item name..."
-              className="w-full" 
+              className="w-full input-box"
             />
           </div>
 
           <div>
-            <label className="form-label">Category *</label>
-            <select name="categoryId" required className="w-full">
+            <label className="label mb-3 block">Category *</label>
+            <select name="categoryId" required className="w-full input-box">
               <option value="">Select category</option>
               {categories.map((cat) => (
                 <optgroup key={cat.id} label={cat.name}>
@@ -67,14 +67,14 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="form-label">Brand</label>
+              <label className="label mb-3 block">Brand</label>
               <input 
                 name="brand" 
                 list="brand-list"
                 placeholder="Select or type brand..." 
-                className="w-full" 
+                className="w-full input-box"
                 autoComplete="off"
               />
               <datalist id="brand-list">
@@ -84,44 +84,42 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
               </datalist>
             </div>
             <div>
-              <label className="form-label">Material</label>
-              <input name="material" placeholder="Titanium, Brass, Steel..." className="w-full" />
+              <label className="label mb-3 block">Material</label>
+              <input name="material" placeholder="Titanium, Brass, Steel..." className="w-full input-box" />
             </div>
           </div>
 
           <div>
-            <label className="form-label">Description</label>
-            <textarea name="description" rows={3} placeholder="Describe this item..." className="w-full" />
+            <label className="label mb-3 block">Description</label>
+            <textarea name="description" rows={3} placeholder="Describe this item..." className="w-full input-box" />
           </div>
         </div>
       </div>
 
-      {/* Section: Pricing */}
-      <div className="pb-6 border-b-3 border-charcoal">
-        <h2 className="section-header">
+      <div className="pb-8" style={{ borderBottom: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Pricing
-        </h2>
-        <div className="grid grid-cols-2 gap-5">
+        </p>
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="form-label">Price Paid ($)</label>
-            <input name="pricePaid" type="number" step="0.01" placeholder="0.00" className="w-full" />
+            <label className="label mb-3 block">Price Paid ($)</label>
+            <input name="pricePaid" type="number" step="0.01" placeholder="0.00" className="w-full input-box" />
           </div>
           <div>
-            <label className="form-label">Current Value ($)</label>
-            <input name="currentValue" type="number" step="0.01" placeholder="0.00" className="w-full" />
+            <label className="label mb-3 block">Current Value ($)</label>
+            <input name="currentValue" type="number" step="0.01" placeholder="0.00" className="w-full input-box" />
           </div>
         </div>
       </div>
 
-      {/* Section: Status */}
-      <div className="pb-6 border-b-3 border-charcoal">
-        <h2 className="section-header">
+      <div className="pb-8" style={{ borderBottom: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Status
-        </h2>
-        <div className="grid grid-cols-2 gap-5">
+        </p>
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="form-label">Status</label>
-            <select name="status" className="w-full">
+            <label className="label mb-3 block">Status</label>
+            <select name="status" className="w-full input-box">
               <option value="OWNED">Owned</option>
               <option value="WISHLIST">Wishlist</option>
               <option value="SOLD">Sold</option>
@@ -129,8 +127,8 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
             </select>
           </div>
           <div>
-            <label className="form-label">Condition</label>
-            <select name="condition" className="w-full">
+            <label className="label mb-3 block">Condition</label>
+            <select name="condition" className="w-full input-box">
               <option value="">Not specified</option>
               <option value="NEW">New</option>
               <option value="LIKE_NEW">Like New</option>
@@ -142,60 +140,56 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
         </div>
       </div>
 
-      {/* Section: Media */}
-      <div className="pb-6 border-b-3 border-charcoal">
-        <h2 className="section-header">
+      <div className="pb-8" style={{ borderBottom: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Media
-        </h2>
+        </p>
         <div>
-          <label className="form-label">Image URL</label>
-          <input name="imageUrl" type="url" placeholder="https://..." className="w-full" />
+          <label className="label mb-3 block">Image URL</label>
+          <input name="imageUrl" type="url" placeholder="https://..." className="w-full input-box" />
         </div>
       </div>
 
-      {/* Section: Specs */}
-      <div className="pb-6 border-b-3 border-charcoal">
-        <h2 className="section-header">
+      <div className="pb-8" style={{ borderBottom: '1px solid rgba(68, 71, 72, 0.15)' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Specifications
-        </h2>
-        <div className="grid grid-cols-3 gap-5">
+        </p>
+        <div className="grid grid-cols-3 gap-6">
           <div>
-            <label className="form-label">Quantity</label>
-            <input name="quantity" type="number" defaultValue="1" min="1" className="w-full" />
+            <label className="label mb-3 block">Quantity</label>
+            <input name="quantity" type="number" defaultValue="1" min="1" className="w-full input-box" />
           </div>
           <div>
-            <label className="form-label">Weight (g)</label>
-            <input name="weightGrams" type="number" step="0.1" placeholder="0.0" className="w-full" />
+            <label className="label mb-3 block">Weight (g)</label>
+            <input name="weightGrams" type="number" step="0.1" placeholder="0.0" className="w-full input-box" />
           </div>
           <div>
-            <label className="form-label">Dimensions</label>
-            <input name="dimensions" placeholder="50x30mm" className="w-full" />
+            <label className="label mb-3 block">Dimensions</label>
+            <input name="dimensions" placeholder="50x30mm" className="w-full input-box" />
           </div>
         </div>
       </div>
 
-      {/* Section: Additional */}
-      <div className="pb-6">
-        <h2 className="section-header">
+      <div className="pb-8">
+        <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--primary)' }}>
           Additional Details
-        </h2>
-        <div className="space-y-5">
+        </p>
+        <div className="space-y-6">
           <div>
-            <label className="form-label">Purchase Source</label>
-            <input name="purchaseSource" placeholder="Etsy, Direct from maker, Amazon..." className="w-full" />
+            <label className="label mb-3 block">Purchase Source</label>
+            <input name="purchaseSource" placeholder="Etsy, Direct from maker, Amazon..." className="w-full input-box" />
           </div>
 
           <div>
-            <label className="form-label">Notes</label>
-            <textarea name="notes" rows={2} placeholder="Additional notes..." className="w-full" />
+            <label className="label mb-3 block">Notes</label>
+            <textarea name="notes" rows={2} placeholder="Additional notes..." className="w-full input-box" />
           </div>
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-4 pt-4">
         <button type="submit" disabled={loading} className="btn btn-primary">
-          <span className="material-symbols-outlined icon-sm">add</span>
+          <Plus className="h-4 w-4" />
           {loading ? 'Adding...' : 'Add to Collection'}
         </button>
         <button 
@@ -203,7 +197,7 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
           onClick={() => router.push('/')} 
           className="btn btn-secondary"
         >
-          <span className="material-symbols-outlined icon-sm">close</span>
+          <X className="h-4 w-4" />
           Cancel
         </button>
       </div>
